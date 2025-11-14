@@ -1,0 +1,4 @@
+project_id = "rxjqdejnbswkzwunptwx"
+
+[functions.seed-exercises]
+verify_jwt = false
