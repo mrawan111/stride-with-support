@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useIsAdmin } from '@/hooks/useIsAdmin';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Activity, Dumbbell, Heart, Zap, Scale, Target, Globe, LogOut } from 'lucide-react';
+import { Activity, Dumbbell, Heart, Zap, Scale, Target, Globe, LogOut, User, Settings } from 'lucide-react';
 import { toast } from 'sonner';
 
 const categoryIcons = {
@@ -19,6 +20,7 @@ const categoryIcons = {
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const { t, language, toggleLanguage } = useLanguage();
+  const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
   const [userData, setUserData] = useState<any>(null);
   const [categories, setCategories] = useState<any[]>([]);
@@ -91,6 +93,24 @@ export default function Dashboard() {
             <h1 className="text-xl font-bold">FitAccess</h1>
           </div>
           <div className="flex items-center gap-2">
+            {isAdmin && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate('/admin/exercises')}
+              >
+                <Settings className="h-4 w-4 mr-2" />
+                {language === 'ar' ? 'إدارة' : 'Admin'}
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate('/profile')}
+            >
+              <User className="h-4 w-4 mr-2" />
+              {language === 'ar' ? 'الملف' : 'Profile'}
+            </Button>
             <Button
               variant="ghost"
               size="icon"
