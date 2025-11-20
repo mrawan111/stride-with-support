@@ -5,6 +5,7 @@ type Language = 'ar' | 'en';
 interface LanguageContextType {
   language: Language;
   toggleLanguage: () => void;
+  setLanguage: (lang: Language) => void;
   t: (key: string) => string;
 }
 
@@ -145,7 +146,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage, t }}>
+    <LanguageContext.Provider value={{ language, toggleLanguage, setLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );
