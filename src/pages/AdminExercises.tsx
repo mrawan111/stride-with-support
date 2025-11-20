@@ -8,7 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { toast } from '@/hooks/use-toast';
-import { Pencil, Trash2, Plus, ArrowLeft } from 'lucide-react';
+import { Pencil, Trash2, Plus, ArrowLeft, Download, Upload } from 'lucide-react';
+import { exportToCSV, exportToJSON, parseCSV, parseJSON } from '@/lib/csvUtils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -58,6 +59,7 @@ export default function AdminExercises() {
   const [filterCategory, setFilterCategory] = useState('all');
   const [filterDifficulty, setFilterDifficulty] = useState('all');
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [importing, setImporting] = useState(false);
 
   useEffect(() => {
     if (!adminLoading && !isAdmin) {
@@ -158,6 +160,111 @@ export default function AdminExercises() {
     }
   }
 
+  async function handleExport(format: 'csv' | 'json') {
+    try {
+      // Fetch all exercises with full details
+      const { data, error } = await supabase
+        .from('exercises')
+        .select(`
+          *,
+          disability_types (title_ar, title_en),
+          exercise_categories (title_ar, title_en)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      const exportData = data.map((ex) => ({
+        disability_type_id: ex.disability_type_id,
+        disability_type: language === 'ar' 
+          ? ex.disability_types?.title_ar || '' 
+          : ex.disability_types?.title_en || '',
+        category_id: ex.category_id,
+        category: language === 'ar' 
+          ? ex.exercise_categories?.title_ar || '' 
+          : ex.exercise_categories?.title_en || '',
+        title_ar: ex.title_ar,
+        title_en: ex.title_en,
+        instructions_ar: ex.instructions_ar,
+        instructions_en: ex.instructions_en,
+        difficulty: ex.difficulty,
+        equipment: ex.equipment,
+        duration_reps: ex.duration_reps,
+        safety_notes_ar: ex.safety_notes_ar,
+        safety_notes_en: ex.safety_notes_en,
+        media_url: ex.media_url,
+      }));
+
+      const timestamp = new Date().toISOString().split('T')[0];
+      const filename = `exercises-${timestamp}.${format}`;
+
+      if (format === 'csv') {
+        exportToCSV(exportData, filename);
+      } else {
+        exportToJSON(exportData, filename);
+      }
+
+      toast({
+        title: language === 'ar' ? 'تم التصدير' : 'Exported',
+        description: language === 'ar' 
+          ? `تم تصدير ${exportData.length} تمرين` 
+          : `Exported ${exportData.length} exercises`,
+      });
+    } catch (error: any) {
+      toast({
+        title: language === 'ar' ? 'خطأ' : 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
+  }
+
+  async function handleImport(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setImporting(true);
+
+    try {
+      const content = await file.text();
+      const extension = file.name.split('.').pop()?.toLowerCase();
+
+      let exercises;
+      if (extension === 'csv') {
+        exercises = parseCSV(content);
+      } else if (extension === 'json') {
+        exercises = parseJSON(content);
+      } else {
+        throw new Error('Unsupported file format. Please use CSV or JSON.');
+      }
+
+      // Call edge function to import
+      const { data, error } = await supabase.functions.invoke('import-exercises', {
+        body: { exercises },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: language === 'ar' ? 'نجح الاستيراد' : 'Import Successful',
+        description: data.message || `Imported ${data.imported} exercises`,
+      });
+
+      // Refresh exercises list
+      fetchData();
+    } catch (error: any) {
+      toast({
+        title: language === 'ar' ? 'خطأ في الاستيراد' : 'Import Error',
+        description: error.message || 'Failed to import exercises',
+        variant: 'destructive',
+      });
+    } finally {
+      setImporting(false);
+      // Reset file input
+      event.target.value = '';
+    }
+  }
+
   if (adminLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -182,10 +289,37 @@ export default function AdminExercises() {
               {language === 'ar' ? 'إدارة التمارين' : 'Exercise Management'}
             </h1>
           </div>
-          <Button onClick={() => navigate('/admin/exercises/new')}>
-            <Plus className="h-4 w-4 mr-2" />
-            {language === 'ar' ? 'إضافة تمرين' : 'Add Exercise'}
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => handleExport('csv')}>
+              <Download className="h-4 w-4 mr-2" />
+              {language === 'ar' ? 'تصدير CSV' : 'Export CSV'}
+            </Button>
+            <Button variant="outline" onClick={() => handleExport('json')}>
+              <Download className="h-4 w-4 mr-2" />
+              {language === 'ar' ? 'تصدير JSON' : 'Export JSON'}
+            </Button>
+            <label>
+              <Button variant="outline" disabled={importing} asChild>
+                <span>
+                  <Upload className="h-4 w-4 mr-2" />
+                  {importing 
+                    ? language === 'ar' ? 'جاري الاستيراد...' : 'Importing...'
+                    : language === 'ar' ? 'استيراد' : 'Import'}
+                </span>
+              </Button>
+              <input
+                type="file"
+                accept=".csv,.json"
+                onChange={handleImport}
+                className="hidden"
+                disabled={importing}
+              />
+            </label>
+            <Button onClick={() => navigate('/admin/exercises/new')}>
+              <Plus className="h-4 w-4 mr-2" />
+              {language === 'ar' ? 'إضافة تمرين' : 'Add Exercise'}
+            </Button>
+          </div>
         </div>
 
         {/* Filters */}
