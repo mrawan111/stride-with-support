@@ -120,7 +120,8 @@ export default function Dashboard() {
       <header className="border-b bg-card/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Activity className="h-6 w-6 text-primary" />
+            {/* <Activity className="h-6 w-6 text-primary" /> */}
+            <img src="favicon.ico" className="h-8 w-8 text-primary"/>
             <h1 className="text-xl font-bold">FitAccess</h1>
           </div>
           <div className="flex items-center gap-2">
