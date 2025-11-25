@@ -39,15 +39,24 @@ export default function Dashboard() {
   const fetchUserData = async () => {
     if (!user) return;
 
-    let { data, error } = await supabase
+    const { data, error } = await supabase
       .from('users')
       .select('*, disability_types(*)')
       .eq('id', user.id)
-      .single();
+      .maybeSingle();
 
-    if (error && error.code === 'PGRST116') {
-      // User doesn't exist, create it
-      const name = user.email === 'admin@fitness.com' ? 'Admin' : user.email?.split('@')[0] || 'User';
+    if (error) {
+      console.error('Error fetching user data:', error);
+      toast.error(t('error'));
+      return;
+    }
+
+    // If no profile exists yet, create a basic one and fetch again
+    if (!data) {
+      const name = user.email === 'admin@fitness.com'
+        ? 'Admin'
+        : user.email?.split('@')[0] || 'User';
+
       const { error: insertError } = await supabase
         .from('users')
         .insert({
@@ -63,12 +72,11 @@ export default function Dashboard() {
         return;
       }
 
-      // Fetch again
       const { data: newData, error: newError } = await supabase
         .from('users')
         .select('*, disability_types(*)')
         .eq('id', user.id)
-        .single();
+        .maybeSingle();
 
       if (newError) {
         console.error('Error fetching user data after insert:', newError);
@@ -76,12 +84,11 @@ export default function Dashboard() {
       } else {
         setUserData(newData);
       }
-    } else if (error) {
-      console.error('Error fetching user data:', error);
-      toast.error(t('error'));
-    } else {
-      setUserData(data);
+
+      return;
     }
+
+    setUserData(data);
   };
 
   const fetchCategories = async () => {
