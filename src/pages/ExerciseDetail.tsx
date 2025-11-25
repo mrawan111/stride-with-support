@@ -161,6 +161,22 @@ export default function ExerciseDetail() {
           </CardHeader>
 
           <CardContent className="space-y-6">
+            {exercise.media_url ? (
+              <div className="mb-6">
+                <video
+                  controls
+                  className="w-full rounded-lg"
+                  src={exercise.media_url}
+                >
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            ) : (
+              <div className="mb-6 p-4 bg-muted rounded-lg text-center text-muted-foreground">
+                {language === 'ar' ? 'لا يوجد فيديو لهذا التمرين' : 'No video for this exercise'}
+              </div>
+            )}
+
             <div>
               <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
                 <Activity className="h-5 w-5 text-primary" />
