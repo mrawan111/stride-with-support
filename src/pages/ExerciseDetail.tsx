@@ -163,13 +163,45 @@ export default function ExerciseDetail() {
           <CardContent className="space-y-6">
             {exercise.media_url ? (
               <div className="mb-6">
-                <video
-                  controls
-                  className="w-full rounded-lg"
-                  src={exercise.media_url}
-                >
-                  Your browser does not support the video tag.
-                </video>
+                {(() => {
+                  const isYouTube = exercise.media_url.includes('youtube.com') || exercise.media_url.includes('youtu.be');
+                  
+                  if (isYouTube) {
+                    // Extract video ID from YouTube URL
+                    let videoId = '';
+                    if (exercise.media_url.includes('youtube.com/shorts/')) {
+                      videoId = exercise.media_url.split('youtube.com/shorts/')[1]?.split('?')[0];
+                    } else if (exercise.media_url.includes('youtu.be/')) {
+                      videoId = exercise.media_url.split('youtu.be/')[1]?.split('?')[0];
+                    } else if (exercise.media_url.includes('youtube.com/watch?v=')) {
+                      videoId = exercise.media_url.split('v=')[1]?.split('&')[0];
+                    } else if (exercise.media_url.includes('youtube.com/embed/')) {
+                      videoId = exercise.media_url.split('embed/')[1]?.split('?')[0];
+                    }
+                    
+                    return (
+                      <iframe
+                        className="w-full aspect-video rounded-lg"
+                        src={`https://www.youtube.com/embed/${videoId}`}
+                        title="Exercise video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    );
+                  }
+                  
+                  // For regular video files
+                  return (
+                    <video
+                      controls
+                      className="w-full rounded-lg"
+                      src={exercise.media_url}
+                      preload="metadata"
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                  );
+                })()}
               </div>
             ) : (
               <div className="mb-6 p-4 bg-muted rounded-lg text-center text-muted-foreground">
