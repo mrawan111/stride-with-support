@@ -198,31 +198,40 @@ export type Database = {
         Row: {
           age: number | null
           color_blind_mode: boolean | null
+          color_blind_mode_type: string | null
           created_at: string
           disability_type_id: string | null
+          font_size: string | null
           id: string
           language_pref: string | null
           name: string
+          reduce_motion: boolean | null
           updated_at: string
         }
         Insert: {
           age?: number | null
           color_blind_mode?: boolean | null
+          color_blind_mode_type?: string | null
           created_at?: string
           disability_type_id?: string | null
+          font_size?: string | null
           id: string
           language_pref?: string | null
           name: string
+          reduce_motion?: boolean | null
           updated_at?: string
         }
         Update: {
           age?: number | null
           color_blind_mode?: boolean | null
+          color_blind_mode_type?: string | null
           created_at?: string
           disability_type_id?: string | null
+          font_size?: string | null
           id?: string
           language_pref?: string | null
           name?: string
+          reduce_motion?: boolean | null
           updated_at?: string
         }
         Relationships: [

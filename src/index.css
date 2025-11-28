@@ -223,3 +223,59 @@ All colors MUST be HSL.
     border-width: 2px;
   }
 }
+
+/* Font Size Styles */
+[data-font-size="small"] {
+  font-size: 14px;
+}
+
+[data-font-size="medium"] {
+  font-size: 16px;
+}
+
+[data-font-size="large"] {
+  font-size: 18px;
+}
+
+[data-font-size="extra-large"] {
+  font-size: 20px;
+}
+
+/* Reduce Motion Styles */
+.reduce-motion,
+.reduce-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Protanopia (Red-Blind) - Specific Color Adjustments */
+.color-blind-mode[data-color-blind-type="protanopia"] {
+  --primary: 210 100% 45%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 45 100% 50%;
+  --secondary-foreground: 0 0% 10%;
+  
+  --accent: 190 100% 45%;
+  --accent-foreground: 0 0% 100%;
+  
+  --destructive: 25 100% 40%;
+  --destructive-foreground: 0 0% 100%;
+}
+
+/* Tritanopia (Blue-Blind) - Specific Color Adjustments */
+.color-blind-mode[data-color-blind-type="tritanopia"] {
+  --primary: 345 100% 45%;
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 180 100% 35%;
+  --secondary-foreground: 0 0% 100%;
+  
+  --accent: 15 100% 50%;
+  --accent-foreground: 0 0% 10%;
+  
+  --destructive: 0 100% 40%;
+  --destructive-foreground: 0 0% 100%;
+}
