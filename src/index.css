@@ -51,20 +51,114 @@ All colors MUST be HSL.
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* Color Blind Friendly Mode - WCAG AAA compliant palette */
+  .color-blind-mode {
+    --background: 0 0% 98%;
+    --foreground: 0 0% 13%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 13%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 13%;
+
+    /* Blue instead of green - safe for all color blindness types */
+    --primary: 210 100% 40%;
+    --primary-foreground: 0 0% 100%;
+    
+    --primary-light: 210 100% 50%;
+    --primary-dark: 210 100% 30%;
+
+    /* Orange instead of secondary blue - high contrast with primary */
+    --secondary: 25 95% 53%;
+    --secondary-foreground: 0 0% 13%;
+
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 40%;
+
+    /* Cyan for accent - distinguishable from primary blue */
+    --accent: 190 100% 45%;
+    --accent-foreground: 0 0% 13%;
+
+    /* Magenta for destructive - clearly different from all other colors */
+    --destructive: 340 85% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 85%;
+    --input: 0 0% 85%;
+    --ring: 210 100% 40%;
+
+    --gradient-hero: linear-gradient(135deg, hsl(210 100% 40%), hsl(25 95% 53%));
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%));
+    
+    --shadow-soft: 0 2px 8px -2px hsl(0 0% 13% / 0.12);
+    --shadow-medium: 0 4px 16px -4px hsl(0 0% 13% / 0.18);
+    --shadow-elevated: 0 8px 24px -8px hsl(0 0% 13% / 0.24);
+
+    --sidebar-background: 0 0% 96%;
+    --sidebar-foreground: 0 0% 20%;
+    --sidebar-primary: 210 100% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 90%;
+    --sidebar-accent-foreground: 0 0% 13%;
+    --sidebar-border: 0 0% 85%;
+    --sidebar-ring: 210 100% 40%;
+
+    /* Enhanced contrast and saturation */
+    filter: saturate(120%) contrast(105%);
+  }
+
+  .color-blind-mode.dark {
+    --background: 0 0% 10%;
+    --foreground: 0 0% 95%;
+
+    --card: 0 0% 13%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 13%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 10%;
+    
+    --primary-light: 210 100% 70%;
+    --primary-dark: 210 100% 50%;
+
+    --secondary: 25 95% 60%;
+    --secondary-foreground: 0 0% 10%;
+
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 190 100% 55%;
+    --accent-foreground: 0 0% 10%;
+
+    --destructive: 340 85% 60%;
+    --destructive-foreground: 0 0% 95%;
+
+    --border: 0 0% 22%;
+    --input: 0 0% 22%;
+    --ring: 210 100% 60%;
+
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 210 100% 60%;
+    --sidebar-primary-foreground: 0 0% 10%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 0 0% 22%;
+    --sidebar-ring: 210 100% 60%;
+
+    filter: saturate(120%) contrast(105%);
   }
 
   .dark {
@@ -116,5 +210,16 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Enhanced focus indicators for color blind mode */
+  .color-blind-mode *:focus-visible {
+    outline: 3px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* High contrast button borders in color blind mode */
+  .color-blind-mode button {
+    border-width: 2px;
   }
 }

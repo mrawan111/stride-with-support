@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Activity, Dumbbell, Heart, Zap, Scale, Target, Globe, LogOut, User, Settings } from 'lucide-react';
 import { toast } from 'sonner';
+import { ColorBlindModeToggle } from '@/components/ColorBlindModeToggle';
 
 const categoryIcons = {
   strength: Dumbbell,
@@ -150,6 +151,7 @@ export default function Dashboard() {
               <User className="h-4 w-4 mr-2" />
               {language === 'ar' ? 'الملف' : 'Profile'}
             </Button>
+            <ColorBlindModeToggle />
             <Button
               variant="ghost"
               size="icon"

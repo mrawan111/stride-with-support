@@ -197,6 +197,7 @@ export type Database = {
       users: {
         Row: {
           age: number | null
+          color_blind_mode: boolean | null
           created_at: string
           disability_type_id: string | null
           id: string
@@ -206,6 +207,7 @@ export type Database = {
         }
         Insert: {
           age?: number | null
+          color_blind_mode?: boolean | null
           created_at?: string
           disability_type_id?: string | null
           id: string
@@ -215,6 +217,7 @@ export type Database = {
         }
         Update: {
           age?: number | null
+          color_blind_mode?: boolean | null
           created_at?: string
           disability_type_id?: string | null
           id?: string
