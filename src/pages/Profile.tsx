@@ -213,6 +213,13 @@ export default function Profile() {
             <Button type="button" variant="outline" onClick={() => navigate('/')}>
               {language === 'ar' ? 'إلغاء' : 'Cancel'}
             </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => navigate('/accessibility')}
+            >
+              {language === 'ar' ? 'إعدادات إمكانية الوصول' : 'Accessibility Settings'}
+            </Button>
           </div>
         </form>
       </div>

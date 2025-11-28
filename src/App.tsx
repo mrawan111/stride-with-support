@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import ExerciseList from "./pages/ExerciseList";
 import ExerciseDetail from "./pages/ExerciseDetail";
 import Profile from "./pages/Profile";
+import AccessibilitySettings from "./pages/AccessibilitySettings";
 import AdminExercises from "./pages/AdminExercises";
 import AdminExerciseForm from "./pages/AdminExerciseForm";
 import NotFound from "./pages/NotFound";
@@ -30,6 +31,7 @@ const App = () => (
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/accessibility" element={<AccessibilitySettings />} />
                 <Route path="/exercises/:category" element={<ExerciseList />} />
                 <Route path="/exercise/:id" element={<ExerciseDetail />} />
                 <Route path="/admin/exercises" element={<AdminExercises />} />
